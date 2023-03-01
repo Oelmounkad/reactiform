@@ -16,6 +16,11 @@ interface ReactiformState {
   [key: string]: any;
 }
 
+type ReactiformReturnType = [
+  v: ReactiformState,
+  handleChange: ChangeEventHandler<HTMLInputElement>
+];
+
 const getReactiformStateFromReactiformFields = (
   initialValues: ReactiformFields
 ) => {
@@ -26,9 +31,9 @@ const getReactiformStateFromReactiformFields = (
 };
 
 export const useReactiform = (
-  reactiFormOptions: ReactiformOptions
-): [v: ReactiformState, handleChange: ChangeEventHandler<HTMLInputElement>] => {
-  const { initialValues } = reactiFormOptions;
+  reactiformOptions: ReactiformOptions
+): ReactiformReturnType => {
+  const { initialValues } = reactiformOptions;
 
   const reactiformState = getReactiformStateFromReactiformFields(initialValues);
 
