@@ -1,16 +1,18 @@
 import { useReactiform } from "./useReactiform";
 
 function App() {
-  const [htmlForm, values] = useReactiform({
-    user: "",
-    password: "",
-    email: "",
+  const [values, handleChange] = useReactiform({
+    initialValues: {
+      user: "",
+      password: "",
+      email: "",
+    },
   });
 
   return (
     <>
-      <div>{htmlForm}</div>
-
+      <input name="user" value={values.user} onChange={handleChange} />
+      <input name="password" value={values.password} onChange={handleChange} />
       <p>{JSON.stringify(values)}</p>
     </>
   );
