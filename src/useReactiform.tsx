@@ -1,17 +1,39 @@
 import React, { ChangeEventHandler, useState } from "react";
 
 interface ReactiformOptions {
-  initialValues: InitialValues;
+  initialValues: ReactiformFields;
 }
-interface InitialValues {
+
+interface ReactiformFieldOptions {
+  value: any;
+  validators?: Function[];
+}
+interface ReactiformFields {
+  [key: string]: ReactiformFieldOptions;
+}
+
+interface ReactiformState {
   [key: string]: any;
 }
 
+const getReactiformStateFromReactiformFields = (
+  initialValues: ReactiformFields
+) => {
+  return Object.entries(initialValues).reduce((acc: any, curr) => {
+    acc[curr[0]] = curr[1].value;
+    return acc;
+  }, {});
+};
+
 export const useReactiform = (
   reactiFormOptions: ReactiformOptions
-): [v: InitialValues, handleChange: ChangeEventHandler<HTMLInputElement>] => {
+): [v: ReactiformState, handleChange: ChangeEventHandler<HTMLInputElement>] => {
   const { initialValues } = reactiFormOptions;
-  const [formValues, setFormValues] = useState<InitialValues>(initialValues);
+
+  const reactiformState = getReactiformStateFromReactiformFields(initialValues);
+
+  const [formValues, setFormValues] =
+    useState<ReactiformState>(reactiformState);
 
   const onFormValuesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({

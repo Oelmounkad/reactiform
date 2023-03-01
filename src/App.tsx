@@ -3,9 +3,12 @@ import { useReactiform } from "./useReactiform";
 function App() {
   const [values, handleChange] = useReactiform({
     initialValues: {
-      user: "",
-      password: "",
-      email: "",
+      user: {
+        value: "myUser",
+      },
+      password: {
+        value: "myPassword",
+      },
     },
   });
 
