@@ -4,6 +4,11 @@
 
 <br>
 
+## Code Guide
+
+- The library logic is in the _hooks/useReactiform.tsx_ file.
+- _App.tsx_ is a component for testing our library's features.
+
 ## Authors
 
 - ELMOUNKAD Oussama [@oelmounkad](https://www.linkedin.com/in/oussamaelmounkad/)
