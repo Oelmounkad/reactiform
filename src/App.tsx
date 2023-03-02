@@ -22,7 +22,7 @@ const myUserValidator = (user: any) => {
 function App() {
   // testing playground
 
-  const [values, handleChange, errors] = useReactiform({
+  const [values, handleChange, errors, hasError] = useReactiform({
     initialValues: {
       user: {
         value: "",
@@ -41,6 +41,15 @@ function App() {
       <input name="password" value={values.password} onChange={handleChange} />
       <p>{JSON.stringify(values)}</p>
       <p>{JSON.stringify(errors)}</p>
+      <p>{JSON.stringify(Object.entries(errors))}</p>
+      <ul>
+        {Object.keys(errors).map((errorName) => (
+          <li>
+            {" "}
+            {errorName} = {hasError(errorName).toString()}{" "}
+          </li>
+        ))}
+      </ul>
     </>
   );
 }
