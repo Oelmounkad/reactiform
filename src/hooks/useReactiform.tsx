@@ -23,26 +23,22 @@ export const useReactiform = (
   const reactiformValidationFunctions =
     getReactiformValidatorFunctionsFromReactiformFields(initialValues);
 
-  const [validationFunctions, setValidationFunctions] =
-    useState<ReactiformValidatorFunctions>(reactiformValidationFunctions);
+  const [validationFunctions] = useState<ReactiformValidatorFunctions>(
+    reactiformValidationFunctions
+  );
 
   const [formValues, setFormValues] =
     useState<ReactiformState>(reactiformState);
 
-  const [errors, setErrors] = useState<ReactiformError[]>([]);
+  const [errors, setErrors] = useState<ReactiformError>({});
 
   useEffect(() => {
     Object.entries(validationFunctions).forEach(([key, validators]) => {
       validators.forEach((validator) => {
-        const x = validator(formValues[key]);
-        console.log("new error", x);
-        setErrors((err) => [...err, x]);
-
-        console.log(`##################errors: ${JSON.stringify(errors)}`);
+        const error = validator(formValues[key]);
+        setErrors((currentErrors) => ({ ...currentErrors, ...error }));
       });
     });
-
-    console.log("changed");
   }, [formValues]);
 
   const onFormValuesChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -52,5 +48,11 @@ export const useReactiform = (
     });
   };
 
-  return [formValues, onFormValuesChange, errors];
+  const hasError = (error: string): boolean => {
+    return Object.entries(errors).some((formError) =>
+      [error, true].every((value, i) => value === formError[i])
+    );
+  };
+
+  return [formValues, onFormValuesChange, errors, hasError];
 };
