@@ -1,7 +1,10 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { ReactiformError } from "../models/reactiform-error.model";
 import { ReactiformFieldValidator } from "../models/reactiform-field-options.model";
-import { ReactiformOptions } from "../models/reactiform-options.model";
+import {
+  ReactiformGlobalCustomValidator,
+  ReactiformOptions,
+} from "../models/reactiform-options.model";
 import { ReactiformReturnType } from "../models/reactiform-return-type.type";
 import { ReactiformState } from "../models/reactiform-state.model";
 import {
@@ -16,7 +19,7 @@ export interface ReactiformValidatorFunctions {
 export const useReactiform = (
   reactiformOptions: ReactiformOptions
 ): ReactiformReturnType => {
-  const { initialValues } = reactiformOptions;
+  const { initialValues, globalCustomValidators } = reactiformOptions;
 
   const reactiformState = getReactiformStateFromReactiformFields(initialValues);
 
@@ -27,23 +30,31 @@ export const useReactiform = (
     reactiformValidationFunctions
   );
 
-  const [formValues, setFormValues] =
-    useState<ReactiformState>(reactiformState);
+  const [globalCustomValidationFunctions] = useState<
+    ReactiformGlobalCustomValidator[]
+  >(globalCustomValidators as ReactiformGlobalCustomValidator[]);
+
+  const [values, setValues] = useState<ReactiformState>(reactiformState);
 
   const [errors, setErrors] = useState<ReactiformError>({});
 
   useEffect(() => {
     Object.entries(validationFunctions).forEach(([key, validators]) => {
       validators.forEach((validator) => {
-        const error = validator(formValues[key]);
+        const error = validator(values[key]);
         setErrors((currentErrors) => ({ ...currentErrors, ...error }));
       });
     });
-  }, [formValues]);
 
-  const onFormValuesChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFormValues({
-      ...formValues,
+    globalCustomValidationFunctions.forEach((validator) => {
+      const error = validator(values);
+      setErrors((currentErrors) => ({ ...currentErrors, ...error }));
+    });
+  }, [values]);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setValues({
+      ...values,
       [e.target.name]: e.target.value,
     });
   };
@@ -54,5 +65,5 @@ export const useReactiform = (
     );
   };
 
-  return [formValues, onFormValuesChange, errors, hasError];
+  return { values, handleChange, errors, hasError };
 };
