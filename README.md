@@ -1,5 +1,5 @@
 <h3 align="center">
-  Reactiform, a hook-based library to build forms for React!
+  Reactiform, a React hook-based library to handle your form logic!
 </h3>
 
 <br>
