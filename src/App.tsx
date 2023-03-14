@@ -7,20 +7,20 @@ const myCustomValidator = (values: any) => {
     : { dumbUserError: false };
 };
 
-const myPasswordValidator = (values: any) => {
-  return values.password.length < 4
+const myPasswordValidator = (password: any) => {
+  return password.length < 4
     ? { passwordLessThan4Error: true }
     : { passwordLessThan4Error: false };
 };
 
-const mySecondPasswordValidator = (values: any) => {
-  return values.password === "1234"
+const mySecondPasswordValidator = (password: any) => {
+  return password === "12345"
     ? { passwordSecurityError: true }
     : { passwordSecurityError: false };
 };
 
-const myUserValidator = (values: any) => {
-  return values.user.length > 5
+const myUserValidator = (user: any) => {
+  return user.length > 5
     ? { userMoreThan4CharactersError: true }
     : { userMoreThan4CharactersError: false };
 };
