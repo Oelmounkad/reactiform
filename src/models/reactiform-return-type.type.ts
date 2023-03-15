@@ -4,8 +4,8 @@ import { ReactiformState } from "./reactiform-state.model";
 
 type HasErrorFunction = (error: string) => boolean;
 export interface ReactiformReturnType {
-  values: ReactiformState;
+  fields: ReactiformState;
   handleChange: ChangeEventHandler<HTMLInputElement>;
-  errors: ReactiformError;
+  globalErrors: ReactiformError;
   hasError: HasErrorFunction;
 }

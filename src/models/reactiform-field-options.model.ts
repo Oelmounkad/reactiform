@@ -1,6 +1,7 @@
 export interface ReactiformFieldOptions {
   value: ReactiformFieldValue;
-  validators?: ReactiformFieldValidator[];
+  validators?: any;
+  customValidators?: ReactiformFieldValidator[];
 }
 
 type ReactiformFieldValue = any;

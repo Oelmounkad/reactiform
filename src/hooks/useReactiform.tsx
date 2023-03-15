@@ -9,7 +9,7 @@ import { ReactiformReturnType } from "../models/reactiform-return-type.type";
 import { ReactiformState } from "../models/reactiform-state.model";
 import {
   getReactiformStateFromReactiformFields,
-  getReactiformValidatorFunctionsFromReactiformFields,
+  getReactiformCustomValidatorFunctionsFromReactiformFields,
 } from "../utilities/reactiform-mappers";
 
 export interface ReactiformValidatorFunctions {
@@ -23,47 +23,52 @@ export const useReactiform = (
 
   const reactiformState = getReactiformStateFromReactiformFields(initialValues);
 
-  const reactiformValidationFunctions =
-    getReactiformValidatorFunctionsFromReactiformFields(initialValues);
+  const reactiformCustomValidationFunctions = getReactiformCustomValidatorFunctionsFromReactiformFields(initialValues);
 
-  const [validationFunctions] = useState<ReactiformValidatorFunctions>(
-    reactiformValidationFunctions
-  );
+  // customValidators VALIDATION FUNCTIONS
+  const [customValidationFunctions] = useState<ReactiformValidatorFunctions>(reactiformCustomValidationFunctions);
 
-  const [globalCustomValidationFunctions] = useState<
-    ReactiformGlobalCustomValidator[]
-  >(globalCustomValidators as ReactiformGlobalCustomValidator[]);
+  // globalCustomValidators VALIDATION FUNCTIONS
+  const [globalCustomValidationFunctions] = useState<ReactiformGlobalCustomValidator[]>(globalCustomValidators as ReactiformGlobalCustomValidator[]);
 
-  const [values, setValues] = useState<ReactiformState>(reactiformState);
+  // VALUES STATE
+  const [fields, setFields] = useState<ReactiformState>(reactiformState);
 
-  const [errors, setErrors] = useState<ReactiformError>({});
+  // ERRORS STATE
+  const [globalErrors, setGlobalErrors] = useState<ReactiformError>({});
 
   useEffect(() => {
-    Object.entries(validationFunctions).forEach(([key, validators]) => {
+    Object.entries(customValidationFunctions).forEach(([key, validators]) => {
       validators.forEach((validator) => {
-        const error = validator(values[key]);
-        setErrors((currentErrors) => ({ ...currentErrors, ...error }));
+        const error = validator(fields[key]);
+        setGlobalErrors((currentErrors) => ({ ...currentErrors, ...error }));
       });
     });
 
     globalCustomValidationFunctions.forEach((validator) => {
-      const error = validator(values);
-      setErrors((currentErrors) => ({ ...currentErrors, ...error }));
+      const error = validator(fields);
+      setGlobalErrors((currentErrors) => ({ ...currentErrors, ...error }));
     });
-  }, [values]);
+
+    console.log('validationFunctions:',customValidationFunctions);
+    console.log('globalCustomValidationFunctions:',globalCustomValidationFunctions);
+  }, [fields]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setValues({
-      ...values,
-      [e.target.name]: e.target.value,
+    setFields({
+      ...fields,
+      [e.target.name]: {
+        ...fields[e.target.name],
+        value: e.target.value
+      },
     });
   };
 
   const hasError = (error: string): boolean => {
-    return Object.entries(errors).some((formError) =>
+    return Object.entries(globalErrors).some((formError) =>
       [error, true].every((value, i) => value === formError[i])
     );
   };
 
-  return { values, handleChange, errors, hasError };
+  return { fields, handleChange, globalErrors, hasError};
 };

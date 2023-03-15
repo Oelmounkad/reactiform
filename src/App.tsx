@@ -1,5 +1,5 @@
 import { useReactiform } from "./hooks/useReactiform";
-
+import Validators from "./utilities/reactiform-validators";
 
 const myCustomValidator = (values: any) => {
   return values.user === 'toto'
@@ -28,15 +28,16 @@ const myUserValidator = (user: any) => {
 function App() {
   // testing playground
 
-  const { values, handleChange, errors, hasError } = useReactiform({
+  const { fields, handleChange, globalErrors, hasError } = useReactiform({
     initialValues: {
       user: {
-        value: "",
-        validators: [myUserValidator],
+        value: '',
+        // validators: [Validators.required], // need to add the functionnality for validators (To Add Later)
+        customValidators: [myUserValidator],
       },
       password: {
-        value: "",
-        validators: [myPasswordValidator, mySecondPasswordValidator],
+        value: '',
+        customValidators: [myPasswordValidator, mySecondPasswordValidator],
       },
     },
     globalCustomValidators: [myCustomValidator]
@@ -47,17 +48,17 @@ function App() {
       <input
         name="user"
         placeholder="User"
-        value={values.user}
+        value={fields.user.value}
         onChange={handleChange}
       />
       <input
         name="password"
         placeholder="Password"
-        value={values.password}
+        value={fields.password.value}
         onChange={handleChange}
       />
-      <p>{JSON.stringify(values)}</p>
-      <p>{JSON.stringify(errors)}</p>
+      <p>{JSON.stringify(fields)}</p>
+      <p>{JSON.stringify(globalErrors)}</p>
       {/* <ul>
         {Object.keys(errors).map((errorName) => (
           <li>

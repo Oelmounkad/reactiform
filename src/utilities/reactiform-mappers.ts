@@ -5,16 +5,16 @@ export const getReactiformStateFromReactiformFields = (
   initialValues: ReactiformFields
 ) => {
   return Object.entries(initialValues).reduce((acc: any, curr) => {
-    acc[curr[0]] = curr[1].value;
+    acc[curr[0]] = {value: curr[1].value};
     return acc;
   }, {});
 };
 
-export const getReactiformValidatorFunctionsFromReactiformFields = (
+export const getReactiformCustomValidatorFunctionsFromReactiformFields = (
   initialValues: ReactiformFields
 ): ReactiformValidatorFunctions => {
   return Object.entries(initialValues).reduce((acc: any, curr) => {
-    acc[curr[0]] = curr[1].validators;
+    acc[curr[0]] = curr[1].customValidators;
     return acc;
   }, {});
 };
