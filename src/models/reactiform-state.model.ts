@@ -1,3 +1,3 @@
 export interface ReactiformState {
-  [key: string]: { value: string, errors?: string[]};
+  [key: string]: { value: string, errors: string[]};
 }

@@ -34,25 +34,44 @@ export const useReactiform = (
   // VALUES STATE
   const [fields, setFields] = useState<ReactiformState>(reactiformState);
 
-  // ERRORS STATE
+  // GLOBAL ERRORS STATE
   const [globalErrors, setGlobalErrors] = useState<ReactiformError>({});
 
   useEffect(() => {
+    console.log('customValidationFunctions:', customValidationFunctions)
     Object.entries(customValidationFunctions).forEach(([key, validators]) => {
       validators.forEach((validator) => {
-        const error = validator(fields[key]);
-        setGlobalErrors((currentErrors) => ({ ...currentErrors, ...error }));
+        const error = validator(fields[key].value);
+        if (Object.values(error)[0]) {
+          setFields((currFields) => ({ 
+        ...currFields,
+         [key]: {
+          ...fields[key],
+          errors: [...fields[key].errors]
+        }}))
+        } else {
+            setFields((currFields) => ({ 
+          ...currFields,
+           [key]: {
+            ...fields[key],
+            errors: fields[key].errors?.filter((err) => err !== Object.keys(error)[0])
+          }}));
+      } 
       });
     });
 
     globalCustomValidationFunctions.forEach((validator) => {
-      const error = validator(fields);
+      const error = validator(fields); // same treatment to include .value
       setGlobalErrors((currentErrors) => ({ ...currentErrors, ...error }));
     });
-
+/* 
     console.log('validationFunctions:',customValidationFunctions);
-    console.log('globalCustomValidationFunctions:',globalCustomValidationFunctions);
-  }, [fields]);
+    console.log('globalCustomValidationFunctions:',globalCustomValidationFunctions); */
+  }, [fields, customValidationFunctions, globalCustomValidationFunctions]);
+
+  const fillFieldsWithErrors = () => {
+    // move logic here to prevent infinite loops caused by useµEffect calling useState and changinf the dependant state
+  }
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFields({

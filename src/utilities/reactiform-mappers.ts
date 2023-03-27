@@ -5,7 +5,7 @@ export const getReactiformStateFromReactiformFields = (
   initialValues: ReactiformFields
 ) => {
   return Object.entries(initialValues).reduce((acc: any, curr) => {
-    acc[curr[0]] = {value: curr[1].value};
+    acc[curr[0]] = {value: curr[1].value, errors: []};
     return acc;
   }, {});
 };

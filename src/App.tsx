@@ -20,7 +20,7 @@ const mySecondPasswordValidator = (password: any) => {
 };
 
 const myUserValidator = (user: any) => {
-  return user.length > 5
+  return user.length > 4
     ? { userMoreThan4CharactersError: true }
     : { userMoreThan4CharactersError: false };
 };
@@ -57,7 +57,7 @@ function App() {
         value={fields.password.value}
         onChange={handleChange}
       />
-      <p>{JSON.stringify(fields)}</p>
+      {/* <p>{JSON.stringify(fields)}</p> */}
       <p>{JSON.stringify(globalErrors)}</p>
       {/* <ul>
         {Object.keys(errors).map((errorName) => (
