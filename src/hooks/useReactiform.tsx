@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { ReactiformError } from "../models/reactiform-error.model";
 import { ReactiformFieldValidator, ReactiformFieldValidatorReturnType } from "../models/reactiform-field-options.model";
-import { ReactiformFieldsError } from "../models/reactiform-fields-errors.model";
+import { ReactiformFieldsErrors } from "../models/reactiform-fields-errors.model";
 import {
   ReactiformGlobalCustomValidator,
   ReactiformOptions,
@@ -39,55 +39,40 @@ export const useReactiform = (
   const initializedFieldsErrors = initializeFieldsErrorsState(initialValues);
 
   // FIELD ERRORS STATE
-  const [fieldsErrors, setFieldsErrors] = useState<ReactiformFieldsError[]>(initializedFieldsErrors);
+  const [fieldsErrors, setFieldsErrors] = useState<ReactiformFieldsErrors>(initializedFieldsErrors);
 
   // GLOBAL ERRORS STATE
   const [globalErrors, setGlobalErrors] = useState<ReactiformError>({});
 
   useEffect(() => {
-    console.log('customValidationFunctions:', customValidationFunctions)
     Object.entries(customValidationFunctions).forEach(([key, validators]) => {
       validators.forEach((validator) => {
         const error = validator(fields[key]);
-        fillFieldsWithErrors(error, key);
+        fillFieldsErrors(error, key);
       });
     });
 
     globalCustomValidationFunctions.forEach((validator) => {
-      const error = validator(fields); // same treatment to include .value
+      const error = validator(fields);
       setGlobalErrors((currentErrors) => ({ ...currentErrors, ...error }));
     });
-/* 
-    console.log('validationFunctions:',customValidationFunctions);
-    console.log('globalCustomValidationFunctions:',globalCustomValidationFunctions); */
   }, [fields]);
 
-  const fillFieldsWithErrors = (error: ReactiformFieldValidatorReturnType, key: string) => {
+  const fillFieldsErrors = (error: ReactiformFieldValidatorReturnType, key: string) => {
     // if error is true and error doesnt exist
     if (Object.values(error)[0] && !fieldHasError(key, Object.keys(error)[0])) {
-      setFieldsErrors((currentFieldsErrors) => 
-      ([...currentFieldsErrors,
-        {
-          [key]: {
-            key,
-            errors: [...currentFieldsErrors.find((err) => err.key === key)?.errors as string[], Object.keys(error)[0]],
-          } 
-        } as unknown as ReactiformFieldsError
-         ])
-        )
+      setFieldsErrors((currFieldsErrors) => 
+      ({ 
+        ...currFieldsErrors,
+        [key]: [...currFieldsErrors[key], Object.keys(error)[0]]
+      }))
     // if error is false and error exists
     } else if (!Object.values(error)[0] && fieldHasError(key, Object.keys(error)[0])){
-      setFieldsErrors((currentFieldsErrors) => 
-      ([...currentFieldsErrors,
-        {
-          [key]: {
-            key,
-            errors: currentFieldsErrors.find((fieldError) => fieldError.key === key)?.errors
-            .filter((err) => err !== Object.keys(error)[0])
-          } 
-        } as unknown as ReactiformFieldsError
-         ])
-        )
+      setFieldsErrors((currFieldsErrors) => 
+      ({ 
+        ...currFieldsErrors,
+        [key]: currFieldsErrors[key].filter((err) => err !== Object.keys(error)[0])
+      }))
   } 
   }
 
@@ -99,8 +84,7 @@ export const useReactiform = (
   };
 
   const fieldHasError = (field: string, error: string) => {
-    const errorArray = fieldsErrors.find((fieldError) => fieldError.key === field)?.errors;
-    return errorArray?.find((err) => err === error);
+    return fieldsErrors[field].find((err) => err === error);
   }
 
   const hasError = (error: string): boolean => {

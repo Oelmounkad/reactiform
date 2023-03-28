@@ -1,4 +1,3 @@
-export interface ReactiformFieldsError {
-    key: string,
-    errors: string[]
+export interface ReactiformFieldsErrors {
+   [key: string]: string[];
 }
