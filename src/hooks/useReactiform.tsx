@@ -59,19 +59,20 @@ export const useReactiform = (
   }, [fields]);
 
   const fillFieldsErrors = (error: ReactiformFieldValidatorReturnType, key: string) => {
+    const errorKey = Object.keys(error)[0];
     // if error is true and error doesnt exist
-    if (Object.values(error)[0] && !fieldHasError(key, Object.keys(error)[0])) {
+    if (Object.values(error)[0] && !fieldHasError(key, errorKey)) {
       setFieldsErrors((currFieldsErrors) => 
       ({ 
         ...currFieldsErrors,
-        [key]: [...currFieldsErrors[key], Object.keys(error)[0]]
+        [key]: [...currFieldsErrors[key], errorKey]
       }))
     // if error is false and error exists
-    } else if (!Object.values(error)[0] && fieldHasError(key, Object.keys(error)[0])){
+    } else if (!Object.values(error)[0] && fieldHasError(key, errorKey)){
       setFieldsErrors((currFieldsErrors) => 
       ({ 
         ...currFieldsErrors,
-        [key]: currFieldsErrors[key].filter((err) => err !== Object.keys(error)[0])
+        [key]: currFieldsErrors[key].filter((err) => err !== errorKey)
       }))
   } 
   }
@@ -84,7 +85,7 @@ export const useReactiform = (
   };
 
   const fieldHasError = (field: string, error: string) => {
-    return fieldsErrors[field].find((err) => err === error);
+    return Boolean(fieldsErrors[field].find((err) => err === error));
   }
 
   const hasError = (error: string): boolean => {
@@ -93,5 +94,5 @@ export const useReactiform = (
     );
   };
 
-  return { fields, handleChange, fieldsErrors, globalErrors, hasError};
+  return { fields, handleChange, fieldsErrors, globalErrors, hasError, fieldHasError};
 };
