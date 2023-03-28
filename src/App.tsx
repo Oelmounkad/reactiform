@@ -28,7 +28,7 @@ const myUserValidator = (user: any) => {
 function App() {
   // testing playground
 
-  const { fields, handleChange, globalErrors, hasError, fieldHasError, fieldsErrors } = useReactiform({
+  const { fields, handleChange, hasError, fieldHasError } = useReactiform({
     initialValues: {
       user: {
         value: '',
@@ -59,9 +59,9 @@ function App() {
         onChange={handleChange}
       />
       <p>{JSON.stringify(fields)}</p>
-      <p>{JSON.stringify(globalErrors)}</p>
+      {/* <p>{JSON.stringify(globalErrors)}</p> */}
       <hr />
-      <p>{JSON.stringify(fieldsErrors)}</p>
+     {/*  <p>{JSON.stringify(fieldsErrors)}</p> */}
       {/* <ul>
         {Object.keys(errors).map((errorName) => (
           <li>
