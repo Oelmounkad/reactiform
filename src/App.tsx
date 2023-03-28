@@ -28,7 +28,7 @@ const myUserValidator = (user: any) => {
 function App() {
   // testing playground
 
-  const { fields, handleChange, globalErrors, hasError, fieldsErrors } = useReactiform({
+  const { fields, handleChange, globalErrors, hasError, fieldHasError, fieldsErrors } = useReactiform({
     initialValues: {
       user: {
         value: '',
@@ -40,7 +40,7 @@ function App() {
         customValidators: [myPasswordValidator, mySecondPasswordValidator],
       },
     },
-    globalCustomValidators: [myCustomValidator]
+    globalCustomValidators: [myCustomValidator],
   });
 
   return (
@@ -51,6 +51,7 @@ function App() {
         value={fields.user}
         onChange={handleChange}
       />
+      {fieldHasError('user', 'userMoreThan4CharactersError') && <div style={{color: 'red'}}>User shouldn't be more than 4 characters</div>} 
       <input
         name="password"
         placeholder="Password"
