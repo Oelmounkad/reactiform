@@ -9,6 +9,6 @@ export type ReactiformFieldValidator = (
   field: any
 ) => ReactiformFieldValidatorReturnType;
 
-interface ReactiformFieldValidatorReturnType {
+export interface ReactiformFieldValidatorReturnType {
   [key: string]: boolean;
 }
