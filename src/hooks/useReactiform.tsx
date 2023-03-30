@@ -54,6 +54,7 @@ export const useReactiform = (
 
     globalCustomValidationFunctions.forEach((validator) => {
       const error = validator(fields);
+      console.log('#############', error)
       setGlobalErrors((currentErrors) => ({ ...currentErrors, ...error }));
     });
   }, [fields]);

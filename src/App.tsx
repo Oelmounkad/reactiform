@@ -52,12 +52,14 @@ function App() {
         onChange={handleChange}
       />
       {fieldHasError('user', 'userMoreThan4CharactersError') && <div style={{color: 'red'}}>User shouldn't be more than 4 characters</div>} 
+      {hasError('dumbUserError') && <div style={{color: 'red'}}>User is dumb</div>} 
       <input
         name="password"
         placeholder="Password"
         value={fields.password}
         onChange={handleChange}
       />
+      {fieldHasError('password', 'passwordSecurityError') && <div style={{color: 'red'}}>Your password ain't secure</div>} 
       <p>{JSON.stringify(fields)}</p>
       {/* <p>{JSON.stringify(globalErrors)}</p> */}
       <hr />
