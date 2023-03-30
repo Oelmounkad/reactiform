@@ -25,10 +25,10 @@ const myUserValidator = (user: any) => {
     : { userMoreThan4CharactersError: false };
 };
 
-function App() {
+function TestingPlayground() {
   // testing playground
 
-  const { fields, handleChange, hasError, fieldHasError, Wrapper } = useReactiform({
+  const { fields, handleChange, hasError, fieldHasError, valid } = useReactiform({
     initialValues: {
       user: {
         value: '',
@@ -45,18 +45,6 @@ function App() {
 
   return (
     <>
-    {/* <Wrapper onChange={handleChange}>
-    <input
-        name="user"
-        placeholder="User"
-        value={fields.user}
-      />
-       <input
-        name="password"
-        placeholder="Password"
-        value={fields.password}
-      />
-    </Wrapper> */}
       <input
         name="user"
         placeholder="User"
@@ -75,18 +63,9 @@ function App() {
       <p>{JSON.stringify(fields)}</p>
       {/* <p>{JSON.stringify(globalErrors)}</p> */}
       <hr />
-     {/*  <p>{JSON.stringify(fieldsErrors)}</p> */}
-       {/* <ul>
-        {Object.keys(errors).map((errorName) => (
-          <li>
-            {" "}
-            {errorName} = {hasError(errorName).toString()}{" "}
-          </li>
-        ))}
-      </ul>
-      <p>{ JSON.stringify(fields)}</p> */}
+      { valid && <p>valid !</p>}
     </>
   );
 }
 
-export default App;
+export default TestingPlayground;
