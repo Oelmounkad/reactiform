@@ -44,6 +44,8 @@ export const useReactiform = (
   // GLOBAL ERRORS STATE
   const [globalErrors, setGlobalErrors] = useState<ReactiformError>({});
 
+  const valid = Object.values(fieldsErrors!).flat().length === 0;
+
   useEffect(() => {
     Object.entries(customValidationFunctions).forEach(([key, validators]) => {
       validators.forEach((validator) => {
@@ -96,5 +98,5 @@ export const useReactiform = (
   };
   
 
-  return { fields, handleChange, fieldsErrors, globalErrors, hasError, fieldHasError};
+  return { fields, handleChange, fieldsErrors, globalErrors, hasError, fieldHasError, valid};
 };

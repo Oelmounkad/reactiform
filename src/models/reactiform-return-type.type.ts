@@ -12,5 +12,5 @@ export interface ReactiformReturnType {
   globalErrors?: ReactiformError;
   hasError: HasErrorFunction;
   fieldHasError: FieldHasErrorFunction;
-  Wrapper?: any;
+  valid: boolean;
 }
