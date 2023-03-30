@@ -7,9 +7,10 @@ type HasErrorFunction = (error: string) => boolean;
 type FieldHasErrorFunction = (field: string, error: string) => boolean;
 export interface ReactiformReturnType {
   fields: ReactiformState;
-  handleChange: ChangeEventHandler<HTMLInputElement>;
+  handleChange?: ChangeEventHandler<HTMLInputElement>;
   fieldsErrors?: ReactiformFieldsErrors;
   globalErrors?: ReactiformError;
   hasError: HasErrorFunction;
   fieldHasError: FieldHasErrorFunction;
+  Wrapper?: any;
 }

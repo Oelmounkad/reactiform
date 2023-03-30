@@ -94,6 +94,7 @@ export const useReactiform = (
       [error, true].every((value, i) => value === formError[i])
     );
   };
+  
 
   return { fields, handleChange, fieldsErrors, globalErrors, hasError, fieldHasError};
 };

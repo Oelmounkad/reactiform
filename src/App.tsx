@@ -28,7 +28,7 @@ const myUserValidator = (user: any) => {
 function App() {
   // testing playground
 
-  const { fields, handleChange, hasError, fieldHasError } = useReactiform({
+  const { fields, handleChange, hasError, fieldHasError, Wrapper } = useReactiform({
     initialValues: {
       user: {
         value: '',
@@ -45,6 +45,18 @@ function App() {
 
   return (
     <>
+    {/* <Wrapper onChange={handleChange}>
+    <input
+        name="user"
+        placeholder="User"
+        value={fields.user}
+      />
+       <input
+        name="password"
+        placeholder="Password"
+        value={fields.password}
+      />
+    </Wrapper> */}
       <input
         name="user"
         placeholder="User"
@@ -64,14 +76,15 @@ function App() {
       {/* <p>{JSON.stringify(globalErrors)}</p> */}
       <hr />
      {/*  <p>{JSON.stringify(fieldsErrors)}</p> */}
-      {/* <ul>
+       {/* <ul>
         {Object.keys(errors).map((errorName) => (
           <li>
             {" "}
             {errorName} = {hasError(errorName).toString()}{" "}
           </li>
         ))}
-      </ul> */}
+      </ul>
+      <p>{ JSON.stringify(fields)}</p> */}
     </>
   );
 }
