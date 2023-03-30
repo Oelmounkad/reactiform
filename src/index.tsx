@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import TestingPlayground from "./App";
+import TestingPlayground from "./TestingPlayground";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
